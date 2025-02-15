@@ -1,0 +1,18 @@
+---
+
+  services:
+    airsonic-advanced:
+      image: lscr.io/linuxserver/airsonic-advanced:latest
+      container_name: airsonic-advanced
+      environment:
+        - PUID=1000
+        - PGID=100
+        - TZ=America/New_York
+      volumes:
+        - CHANGE_TO_DOCKER_DATA_PATH/airsonic:/config
+        - CHANGE_TO_MUSIC_MEDIA_DATA_PATH:/music
+        - CHANGE_TO_DOCKER_DATA_PATH/airsonic/playlists:/playlists
+        - CHANGE_TO_DOCKER_DATA_PATH/airsonic/podcasts:/podcasts
+      ports:
+        - 4040:4040
+      restart: unless-stopped

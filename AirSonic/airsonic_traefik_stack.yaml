@@ -1,0 +1,30 @@
+---
+
+services:
+  airsonic-advanced:
+    image: lscr.io/linuxserver/airsonic-advanced:latest
+    container_name: airsonic-advanced
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.airsonic-advanced.rule=Host(`music.mywebsite.com`)"
+      - "traefik.http.routers.airsonic-advanced.entrypoints=https"
+      - "traefik.http.routers.airsonic-advanced.tls=true"
+      - "traefik.http.services.airsonic-advanced.loadbalancer.server.port=4040"
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/New_York
+    volumes:
+        - CHANGE_TO_DOCKER_DATA_PATH/airsonic:/config
+        - CHANGE_TO_MUSIC_MEDIA_DATA_PATH:/music
+        - CHANGE_TO_DOCKER_DATA_PATH/airsonic/playlists:/playlists
+        - CHANGE_TO_DOCKER_DATA_PATH/airsonic/podcasts:/podcasts
+    #ports:
+    #  - 4040:4040
+    networks:
+      - web
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true
