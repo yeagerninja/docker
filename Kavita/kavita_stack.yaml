@@ -1,0 +1,18 @@
+---
+
+services:
+    kavita:
+        image: jvmilazz0/kavita:latest
+        container_name: kavita
+        environment:
+            - PUID=${APPUSER_PUID}
+            - PGID=${APPUSER_PGID}
+            - TZ=${TIME_ZONE_VALUE}
+        volumes:
+            #- ./manga:/manga
+            - ${PATH_TO_EBOOKS}/Comics:/comics
+            - ${PATH_TO_EBOOKS}/Books:/books
+            - ${PATH_TO_DOCKERDATA}/kavita:/kavita/config
+        ports:
+            - 5000:5000 # Change the public port (the first 5000) if you have conflicts with other services
+        restart: unless-stopped

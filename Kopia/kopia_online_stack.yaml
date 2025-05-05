@@ -1,0 +1,31 @@
+---
+
+services:
+  kopia:
+    image: kopia/kopia:latest
+    container_name: kopia-online
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+      - KOPIA_PASSWORD=${KOPIA_PASSWORD}
+      #- B2_BUCKET=your-bucket-name
+      #- B2_ACCOUNT_ID=your-account-id
+      #- B2_ACCOUNT_KEY=your-account-key
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/kopia-online/config:/app/config
+      - ${PATH_TO_DOCKERDATA}/kopia-online/cache:/app/cache
+      - ${PATH_TO_DOCKERDATA}/kopia-online/logs:/app/logs
+      #- ${PATH_TO_BACKUPDATA}/Backups/Kopia:/backup
+      - ${PATH_TO_BACKUPDATA}/BackupManual/Exports:/export
+      - ${PATH_TO_APPDATA}:/data:ro
+    command:
+      - server
+      - start
+      - --insecure
+      - --address=0.0.0.0:51517
+      - --server-username=${KOPIA_USER}
+      - --server-password=${KOPIA_USER_PASSWORD}
+    ports:
+      - 51517:51517
+    restart: unless-stopped

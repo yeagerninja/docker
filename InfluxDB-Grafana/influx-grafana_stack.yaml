@@ -1,0 +1,29 @@
+---
+
+services:
+  influxdb:
+    container_name: influxdb
+    image: influxdb:2.0
+    restart: unless-stopped
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/influxdb/data:/var/lib/influxdb2
+      - ${PATH_TO_DOCKERDATA}/influxdb/config:/etc/influxdb2
+    ports:
+      - 8086:8086
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/grafana:/var/lib/grafana # NOTE: must run "chown -R 472:472 /volume1/docker/grafana"
+    depends_on:
+      - influxdb
+    ports:
+      - 3000:3000
+    environment:
+      # for embedding in HA
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_SECURITY_ALLOW_EMBEDDING=true

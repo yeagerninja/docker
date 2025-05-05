@@ -8,8 +8,8 @@ services:
     # Network mode must be set to host for MA to work correctly
     network_mode: host
     volumes:
-      - CHANGE_TO_DOCKER_DATA_PATH/musicassistant:/data/
-      - CHANGE_TO_MUSIC_MEDIA_DATA_PATH:/media # Location of music files
+      - ${PATH_TO_DOCKERDATA}/musicassistant:/data/
+      - ${PATH_TO_MUSIC}:/media
     # privileged caps (and security-opt) needed to mount smb folders within the container
     cap_add:
       - SYS_ADMIN
