@@ -1,0 +1,36 @@
+---
+
+services:
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome:latest
+    ports:
+      - 6052:6052
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/esphome:/config
+      - ${PATH_TO_DOCKERDATA}/esphome:/cache
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    #privileged: true
+    #network_mode: host
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    ports:
+      - 1883:1883
+      # This port is for Webhooks
+      - 9001:9001
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/mosquitto/config:/mosquitto/config
+      - ${PATH_TO_DOCKERDATA}/mosquitto/data:/mosquitto/data
+      - ${PATH_TO_DOCKERDATA}/mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}

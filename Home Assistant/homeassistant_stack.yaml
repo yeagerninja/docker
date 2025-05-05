@@ -2,20 +2,20 @@
 
   services:
     homeassistant:
-      image: linuxserver/homeassistant:2024.6.4
-    #image: linuxserver/homeassistant:2023.10.5
+      image: linuxserver/homeassistant:2025.4.3
+      #image: linuxserver/homeassistant:2025.2.3
       #image: linuxserver/homeassistant:latest
       container_name: homeassistant
-      network_mode: host
-      restart: unless-stopped
       environment:
-        - TZ=America/New_York # Specify a timezone to use
-        - PUID=1000 # User ID to run as
-        - PGID=100 # Group ID to run as
+        - PUID=${APPUSER_PUID}
+        - PGID=${APPUSER_PGID}
+        - TZ=${TIME_ZONE_VALUE}
       volumes:
-        - CHANGE_TO_DOCKER_DATA_PATH/homeassistant/config:/config # Contains all relevant configuration files.
+        - ${PATH_TO_DOCKERDATA}/homeassistant/config:/config # Contains all relevant configuration files.
+      network_mode: host
       ports:
         - 8123:8123
       devices:
         - /dev/ttyUSB0:/dev/ttyUSB0 # For passing through USB, serial or gpio devices.
-        # - /path/to/device:/path/to/device
+        #- /path/to/device:/path/to/device
+      restart: unless-stopped

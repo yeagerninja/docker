@@ -1,0 +1,17 @@
+---
+
+services:
+  dokuwiki:
+    image: lscr.io/linuxserver/dokuwiki:latest
+    container_name: dokuwiki
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/dokuwiki:/config
+    ports:
+      - 5581:80
+      #- 80:80 #optional
+      #- 443:443 #optional
+    restart: unless-stopped
