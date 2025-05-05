@@ -1,0 +1,47 @@
+---
+
+services:
+  wyoming-piper:
+    container_name: piper
+    image: rhasspy/wyoming-piper
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+    ports:
+      - 10200:10200
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/piper:/data
+    command: --voice en_US-lessac-medium
+    restart: unless-stopped
+
+
+  wyoming-whisper:
+    container_name: whisper
+    image: rhasspy/wyoming-whisper
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/whisper:/data
+    command: --model tiny-int8 --language en
+    ports:
+      - 10300:10300
+    restart: unless-stopped
+
+
+  openwakeword:
+    container_name: openwakeword
+    image: rhasspy/wyoming-openwakeword
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/openwakeword/data:/data
+      - ${PATH_TO_DOCKERDATA}/openwakeword/custom:/custom
+    command: --preload-model 'ok_nabu' --custom-model-dir /custom
+    ports:
+      - 10400:10400
+    restart: unless-stopped
