@@ -1,0 +1,16 @@
+---
+
+services:
+  codex:
+    image: docker.io/ajslater/codex:latest
+    container_name: codex
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/codex:/config
+      - ${PATH_TO_EBOOKS}/Comics:/comics:ro
+    ports:
+      - "9810:9810"
+    restart: unless-stopped

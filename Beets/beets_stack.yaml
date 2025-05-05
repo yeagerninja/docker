@@ -1,0 +1,17 @@
+---
+
+services:
+  beets:
+    image: lscr.io/linuxserver/beets:latest
+    container_name: beets
+    environment:
+      - PUID=${APPUSER_PUID}
+      - PGID=${APPUSER_PGID}
+      - TZ=${TIME_ZONE_VALUE}
+    volumes:
+      - ${PATH_TO_DOCKERDATA}/beets:/config
+      - ${PATH_TO_MUSIC}:/music
+      - ${PATH_TO_APPDATA}/MediaContent/Music:/downloads
+    ports:
+      - 8337:8337
+    restart: unless-stopped
